@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pravins PAN Portal - Admin Dashboard</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:Inter,Arial,sans-serif;
+  background:#070b18;
+  color:#fff;
+  min-height:100vh;
+}
+.header{
+  padding:22px 18px;
+  background:linear-gradient(135deg,#101936,#0a1024);
+  border-bottom:1px solid #26304b;
+  position:sticky;top:0;z-index:10;
+}
+.brand{font-size:23px;font-weight:800}
+.brand span{color:#ffc400}
+.sub{color:#8e99b5;font-size:13px;margin-top:4px}
+.container{padding:22px 16px 40px;max-width:900px;margin:auto}
+.welcome{
+  background:linear-gradient(135deg,#151e3d,#0d142b);
+  border:1px solid #293557;border-radius:22px;padding:22px;
+  margin-bottom:18px;
+}
+.welcome h1{font-size:28px;margin-bottom:7px}
+.welcome p{color:#9da8c2;font-size:14px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
+.stat{
+  background:#10172c;border:1px solid #273250;border-radius:16px;
+  padding:16px 10px;text-align:center;
+}
+.stat b{display:block;font-size:24px;color:#ffc400}
+.stat span{font-size:11px;color:#8f9ab5}
+.card{
+  background:#10172c;border:1px solid #293557;border-radius:20px;
+  padding:20px;margin-bottom:18px;
+}
+.card h2{font-size:19px;margin-bottom:5px}
+.card .desc{font-size:13px;color:#8f9ab5;margin-bottom:18px}
+label{display:block;font-size:13px;color:#b5bfd5;margin:13px 0 7px}
+input{
+  width:100%;padding:14px 15px;border-radius:12px;
+  border:1px solid #303d5e;background:#080e1f;color:#fff;
+  font-size:15px;outline:none;
+}
+input:focus{border-color:#ffc400}
+.btn{
+  width:100%;margin-top:18px;padding:15px;border:0;border-radius:12px;
+  background:#ffc400;color:#101010;font-size:15px;font-weight:800;
+  cursor:pointer;
+}
+.btn:active{transform:scale(.99)}
+.retailer{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:10px;background:#0b1122;border:1px solid #263250;
+  border-radius:14px;padding:14px;margin-top:10px;
+}
+.avatar{
+  width:42px;height:42px;border-radius:50%;background:#ffc400;color:#111;
+  display:grid;place-items:center;font-weight:900;
+}
+.info{flex:1}.info b{display:block;font-size:14px}.info small{color:#8792ad}
+.badge{font-size:11px;padding:6px 9px;border-radius:20px;background:#123c2d;color:#59e3a2}
+.empty{color:#7e8aa6;text-align:center;padding:18px;font-size:13px}
+.toast{
+  position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(100px);
+  background:#17213b;border:1px solid #39496f;padding:13px 18px;border-radius:12px;
+  transition:.3s;z-index:20;font-size:13px;
+}
+.toast.show{transform:translateX(-50%) translateY(0)}
+@media(max-width:500px){.stats{gap:7px}.stat{padding:13px 5px}.stat b{font-size:20px}}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="brand">PRAVINS <span>PAN</span> PORTAL</div>
+  <div class="sub">Admin Control Panel</div>
+</header>
+
+<main class="container">
+  <section class="welcome">
+    <h1>Welcome, Admin 👋</h1>
+    <p>Manage retailers and PAN card applications from one place.</p>
+  </section>
+
+  <section class="stats">
+    <div class="stat"><b id="retailerCount">0</b><span>RETAILERS</span></div>
+    <div class="stat"><b>0</b><span>APPLICATIONS</span></div>
+    <div class="stat"><b>1</b><span>SERVICE</span></div>
+  </section>
+
+  <section class="card">
+    <h2>➕ Create Retailer</h2>
+    <p class="desc">Create login credentials for a new retailer.</p>
+
+    <label>Retailer Name</label>
+    <input id="name" type="text" placeholder="Enter retailer name">
+
+    <label>Username</label>
+    <input id="username" type="text" placeholder="Enter username">
+
+    <label>Mobile Number</label>
+    <input id="mobile" type="tel" placeholder="Enter mobile number">
+
+    <label>Password</label>
+    <input id="password" type="password" placeholder="Create password">
+
+    <button class="btn" onclick="createRetailer()">CREATE RETAILER</button>
+  </section>
+
+  <section class="card">
+    <h2>👥 Retailers</h2>
+    <p class="desc">Retailer accounts created by admin.</p>
+    <div id="retailerList" class="empty">No retailers created yet.</div>
+  </section>
+
+  <section class="card">
+    <h2>📄 PAN Applications</h2>
+    <p class="desc">Submitted PAN applications will appear here.</p>
+    <div class="empty">No applications yet.</div>
+  </section>
+</main>
+
+<div id="toast" class="toast"></div>
+
+<script>
+let retailers = JSON.parse(localStorage.getItem("pravins_retailers") || "[]");
+
+function renderRetailers(){
+  const list=document.getElementById("retailerList");
+  document.getElementById("retailerCount").textContent=retailers.length;
+
+  if(!retailers.length){
+    list.className="empty";
+    list.innerHTML="No retailers created yet.";
+    return;
+  }
+
+  list.className="";
+  list.innerHTML=retailers.map(r=>`
+    <div class="retailer">
+      <div class="avatar">${r.name.charAt(0).toUpperCase()}</div>
+      <div class="info">
+        <b>${escapeHtml(r.name)}</b>
+        <small>@${escapeHtml(r.username)} • ${escapeHtml(r.mobile)}</small>
+      </div>
+      <span class="badge">ACTIVE</span>
+    </div>
+  `).join("");
+}
+
+function createRetailer(){
+  const name=document.getElementById("name").value.trim();
+  const username=document.getElementById("username").value.trim();
+  const mobile=document.getElementById("mobile").value.trim();
+  const password=document.getElementById("password").value;
+
+  if(!name || !username || !mobile || !password){
+    showToast("Please fill all fields.");
+    return;
+  }
+
+  if(retailers.some(r=>r.username.toLowerCase()===username.toLowerCase())){
+    showToast("Username already exists.");
+    return;
+  }
+
+  retailers.push({name,username,mobile,password});
+  localStorage.setItem("pravins_retailers",JSON.stringify(retailers));
+
+  document.getElementById("name").value="";
+  document.getElementById("username").value="";
+  document.getElementById("mobile").value="";
+  document.getElementById("password").value="";
+
+  renderRetailers();
+  showToast("Retailer created successfully.");
+}
+
+function showToast(msg){
+  const t=document.getElementById("toast");
+  t.textContent=msg;t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"),2200);
+}
+
+function escapeHtml(s){
+  return s.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+}
+
+renderRetailers();
+</script>
+</body>
+</html>
