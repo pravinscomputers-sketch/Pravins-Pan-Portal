@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>PRAVINS PAN PORTAL - Admin</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    background:#050914;
+    color:#fff;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+header{
+    background:#0d1730;
+    border-bottom:1px solid #293858;
+    padding:20px 5%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.logo{
+    font-size:24px;
+    font-weight:800;
+}
+
+.logo span{
+    color:#ffc914;
+}
+
+.logout{
+    background:#ffc914;
+    color:#101010;
+    border:0;
+    border-radius:10px;
+    padding:11px 18px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+main{
+    max-width:1100px;
+    margin:auto;
+    padding:30px 20px 60px;
+}
+
+h1{
+    margin-bottom:6px;
+}
+
+.muted{
+    color:#91a3c5;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.card{
+    background:#101a30;
+    border:1px solid #293858;
+    border-radius:20px;
+    padding:22px;
+    margin-bottom:20px;
+}
+
+.card h2{
+    margin-top:0;
+}
+
+input{
+    width:100%;
+    padding:13px;
+    border-radius:11px;
+    border:1px solid #344665;
+    background:#071021;
+    color:#fff;
+    margin:7px 0 12px;
+    outline:none;
+}
+
+input:focus{
+    border-color:#ffc914;
+}
+
+button{
+    padding:11px 15px;
+    border:0;
+    border-radius:10px;
+    background:#ffc914;
+    color:#101010;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+button:disabled{
+    opacity:.5;
+    cursor:not-allowed;
+}
+
+.danger{
+    background:#d94a61;
+    color:#fff;
+}
+
+.secondary{
+    background:#172846;
+    color:#d9e5fa;
+}
+
+.row{
+    border-top:1px solid #293858;
+    padding:16px 0;
+}
+
+.row:first-child{
+    border-top:0;
+}
+
+.retailer-actions{
+    display:flex;
+    gap:8px;
+    margin-top:10px;
+    flex-wrap:wrap;
+}
+
+.badge{
+    display:inline-block;
+    padding:5px 9px;
+    border-radius:8px;
+    background:#172846;
+    color:#a7c9ff;
+    font-size:12px;
+}
+
+.active{
+    background:#123c2d;
+    color:#7ff0b4;
+}
+
+.blocked{
+    background:#3a1821;
+    color:#ff9caf;
+}
+
+.app{
+    border:1px solid #293858;
+    background:#091225;
+    border-radius:15px;
+    padding:18px;
+    margin:12px 0;
+}
+
+.app h3{
+    margin:0 0 8px;
+}
+
+.meta{
+    color:#91a3c5;
+    font-size:13px;
+    line-height:1.75;
+}
+
+.filebtn{
+    display:inline-block;
+    margin-top:12px;
+    padding:10px 13px;
+    border-radius:10px;
+    background:#172846;
+    color:#fff;
+    text-decoration:none;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.ack{
+    display:flex;
+    gap:8px;
+    margin-top:14px;
+}
+
+.ack input{
+    margin:0;
+    flex:1;
+}
+
+.empty{
+    text-align:center;
+    color:#7183a8;
+    padding:25px;
+}
+
+.message{
+    margin-top:12px;
+    padding:11px;
+    border-radius:10px;
+    background:#12253a;
+    color:#b9dfff;
+}
+
+.success{
+    background:#102e25;
+    color:#9ff0c7;
+}
+
+.error{
+    background:#321728;
+    color:#ffb6c7;
+}
+
+.confirm-box{
+    position:fixed;
+    inset:0;
+    background:#0009;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:100;
+    padding:20px;
+}
+
+.confirm-card{
+    max-width:400px;
+    width:100%;
+    background:#101a30;
+    border:1px solid #354563;
+    border-radius:20px;
+    padding:25px;
+    box-shadow:0 20px 60px #000;
+}
+
+.confirm-actions{
+    display:flex;
+    gap:10px;
+    margin-top:20px;
+}
+
+.confirm-actions button{
+    flex:1;
+}
+
+@media(max-width:800px){
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .ack{
+        flex-direction:column;
+    }
+
+    .ack button{
+        width:100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        <span>PRAVINS</span> PAN PORTAL
+    </div>
+
+    <button class="logout" onclick="logout()">
+        LOGOUT
+    </button>
+
+</header>
+
+
+<main>
+
+    <h1>Admin Control Panel</h1>
+
+    <p class="muted">
+        Manage retailers and PAN card applications.
+    </p>
+
+
+    <!-- CREATE + RETAILERS -->
+
+    <div class="grid">
+
+        <!-- CREATE RETAILER -->
+
+        <section class="card">
+
+            <h2>➕ Create Retailer</h2>
+
+            <p class="muted">
+                Create a login account for a retailer.
+            </p>
+
+            <input
+                id="rname"
+                type="text"
+                placeholder="Retailer Name"
+            >
+
+            <input
+                id="remail"
+                type="email"
+                placeholder="Retailer Email"
+            >
+
+            <input
+                id="rpass"
+                type="password"
+                placeholder="Retailer Password"
+            >
+
+            <button
+                onclick="createRetailer()"
+            >
+                CREATE RETAILER
+            </button>
+
+            <div
+                id="rmsg"
+                class="message"
+                style="display:none"
+            ></div>
+
+        </section>
+
+
+        <!-- RETAILER LIST -->
+
+        <section class="card">
+
+            <h2>👥 Retailers</h2>
+
+            <p class="muted">
+                Manage retailer accounts.
+            </p>
+
+            <div id="retailers"></div>
+
+        </section>
+
+    </div>
+
+
+    <!-- APPLICATIONS -->
+
+    <section class="card">
+
+        <h2>📄 PAN Applications</h2>
+
+        <p class="muted">
+            View submitted files and update acknowledgement numbers.
+        </p>
+
+        <div id="apps"></div>
+
+    </section>
+
+</main>
+
+
+<!-- DELETE CONFIRM -->
+
+<div
+    id="confirmBox"
+    class="confirm-box"
+>
+
+    <div class="confirm-card">
+
+        <h2>Delete Retailer?</h2>
+
+        <p
+            id="confirmText"
+            class="muted"
+        >
+        </p>
+
+        <p class="muted">
+            This will remove the retailer login.
+            PAN applications will not be deleted.
+        </p>
+
+        <div class="confirm-actions">
+
+            <button
+                class="secondary"
+                onclick="closeConfirm()"
+            >
+                CANCEL
+            </button>
+
+            <button
+                class="danger"
+                onclick="confirmDelete()"
+            >
+                DELETE
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   RETAILER STORAGE
+===================================================== */
+
+function getRetailers(){
+
+    return JSON.parse(
+        localStorage.getItem(
+            "pravins_retailers"
+        ) || "[]"
+    );
+
+}
+
+
+function saveRetailers(data){
+
+    localStorage.setItem(
+        "pravins_retailers",
+        JSON.stringify(data)
+    );
+
+}
+
+
+/* =====================================================
+   APPLICATION STORAGE
+===================================================== */
+
+function getApps(){
+
+    return JSON.parse(
+        localStorage.getItem(
+            "pravins_pan_apps"
+        ) || "[]"
+    );
+
+}
+
+
+function saveApps(data){
+
+    localStorage.setItem(
+        "pravins_pan_apps",
+        JSON.stringify(data)
+    );
+
+}
+
+
+/* =====================================================
+   CREATE RETAILER
+===================================================== */
+
+function createRetailer(){
+
+    const name =
+        document.getElementById(
+            "rname"
+        ).value.trim();
+
+    const email =
+        document.getElementById(
+            "remail"
+        ).value.trim().toLowerCase();
+
+    const password =
+        document.getElementById(
+            "rpass"
+        ).value;
+
+
+    if(
+        !name ||
+        !email ||
+        !password
+    ){
+
+        showMessage(
+            "Please fill all fields.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    if(password.length < 6){
+
+        showMessage(
+            "Password must be at least 6 characters.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    let retailers =
+        getRetailers();
+
+
+    const exists =
+        retailers.some(
+            r =>
+                (r.email || "")
+                .toLowerCase()
+                === email
+        );
+
+
+    if(exists){
+
+        showMessage(
+            "Retailer already exists.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    retailers.push({
+
+        id:
+            "RET-" +
+            Date.now(),
+
+        name:name,
+
+        email:email,
+
+        password:password,
+
+        status:"ACTIVE",
+
+        createdAt:
+            new Date()
+            .toLocaleString(
+                "en-IN"
+            )
+
+    });
+
+
+    saveRetailers(
+        retailers
+    );
+
+
+    document.getElementById(
+        "rname"
+    ).value = "";
+
+    document.getElementById(
+        "remail"
+    ).value = "";
+
+    document.getElementById(
+        "rpass"
+    ).value = "";
+
+
+    showMessage(
+        "Retailer created successfully.",
+        "success"
+    );
+
+
+    renderRetailers();
+
+}
+
+
+/* =====================================================
+   RETAILER LIST
+===================================================== */
+
+function renderRetailers(){
+
+    const box =
+        document.getElementById(
+            "retailers"
+        );
+
+    const retailers =
+        getRetailers();
+
+
+    if(!retailers.length){
+
+        box.innerHTML =
+            '<div class="empty">' +
+            'No retailers created yet.' +
+            '</div>';
+
+        return;
+    }
+
+
+    box.innerHTML =
+        retailers
+        .map(
+            (r,index) => `
+
+            <div class="row">
+
+                <strong>
+                    ${esc(r.name)}
+                </strong>
+
+                <div class="meta">
+                    ${esc(r.email)}
+                </div>
+
+                <div
+                    class="badge ${
+                        r.status === "ACTIVE"
+                        ? "active"
+                        : "blocked"
+                    }"
+                    style="margin-top:7px"
+                >
+                    ${esc(
+                        r.status || "ACTIVE"
+                    )}
+                </div>
+
+
+                <div class="retailer-actions">
+
+                    <button
+                        class="secondary"
+                        onclick="toggleRetailer(${index})"
+                    >
+                        ${
+                            r.status === "ACTIVE"
+                            ? "BLOCK"
+                            : "ACTIVATE"
+                        }
+                    </button>
+
+
+                    <button
+                        class="danger"
+                        onclick="askDelete(${index})"
+                    >
+                        🗑️ DELETE
+                    </button>
+
+                </div>
+
+            </div>
+
+        `
+        )
+        .join("");
+
+}
+
+
+/* =====================================================
+   BLOCK / ACTIVATE
+===================================================== */
+
+function toggleRetailer(index){
+
+    const retailers =
+        getRetailers();
+
+
+    if(!retailers[index]){
+        return;
+    }
+
+
+    retailers[index].status =
+        retailers[index].status === "ACTIVE"
+        ? "BLOCKED"
+        : "ACTIVE";
+
+
+    saveRetailers(
+        retailers
+    );
+
+
+    renderRetailers();
+
+}
+
+
+/* =====================================================
+   DELETE RETAILER
+===================================================== */
+
+let deleteIndex = null;
+
+
+function askDelete(index){
+
+    const retailers =
+        getRetailers();
+
+
+    if(!retailers[index]){
+        return;
+    }
+
+
+    deleteIndex =
+        index;
+
+
+    document.getElementById(
+        "confirmText"
+    ).textContent =
+        "Delete retailer: " +
+        retailers[index].name +
+        "?";
+
+
+    document.getElementById(
+        "confirmBox"
+    ).style.display =
+        "flex";
+
+}
+
+
+function closeConfirm(){
+
+    deleteIndex =
+        null;
+
+    document.getElementById(
+        "confirmBox"
+    ).style.display =
+        "none";
+
+}
+
+
+function confirmDelete(){
+
+    if(
+        deleteIndex === null
+    ){
+        return;
+    }
+
+
+    const retailers =
+        getRetailers();
+
+
+    if(!retailers[deleteIndex]){
+        closeConfirm();
+        return;
+    }
+
+
+    /*
+       IMPORTANT:
+       Only retailer account is removed.
+       PAN applications remain untouched.
+    */
+
+    retailers.splice(
+        deleteIndex,
+        1
+    );
+
+
+    saveRetailers(
+        retailers
+    );
+
+
+    closeConfirm();
+
+
+    renderRetailers();
+
+
+    showMessage(
+        "Retailer deleted successfully.",
+        "success"
+    );
+
+}
+
+
+/* =====================================================
+   PAN APPLICATIONS
+===================================================== */
+
+function renderApps(){
+
+    const box =
+        document.getElementById(
+            "apps"
+        );
+
+    const apps =
+        getApps();
+
+
+    if(!apps.length){
+
+        box.innerHTML =
+            '<div class="empty">' +
+            'No PAN applications submitted yet.' +
+            '</div>';
+
+        return;
+    }
+
+
+    box.innerHTML =
+        apps
+        .map(
+            app => `
+
+            <div class="app">
+
+                <h3>
+                    ${esc(
+                        app.customerName
+                        || "Customer"
+                    )}
+                </h3>
+
+
+                <div class="meta">
+
+                    Service:
+                    PAN CARD APPLY
+                    <br>
+
+                    Retailer:
+                    ${esc(
+                        app.retailerName
+                        ||
+                        app.retailerEmail
+                        ||
+                        "Retailer"
+                    )}
+
+                    <br>
+
+                    Mobile:
+                    ${esc(
+                        app.mobile
+                        || "-"
+                    )}
+
+                    <br>
+
+                    File:
+                    ${esc(
+                        app.fileName
+                        || "-"
+                    )}
+
+                    <br>
+
+                    Submitted:
+                    ${esc(
+                        app.createdAt
+                        || "-"
+                    )}
+
+                </div>
+
+
+                ${
+                    app.fileData
+
+                    ?
+
+                    `
+                    <a
+                        class="filebtn"
+                        href="${app.fileData}"
+                        target="_blank"
+                        rel="noopener"
+                    >
+                        📎 VIEW FILE
+                    </a>
+
+                    <a
+                        class="filebtn"
+                        href="${app.fileData}"
+                        download="${esc(
+                            app.fileName
+                            || "pan-document"
+                        )}"
+                    >
+                        ⬇ DOWNLOAD
+                    </a>
+                    `
+
+                    :
+
+                    `
+                    <div class="meta">
+                        No file available.
+                    </div>
+                    `
+                }
+
+
+                <div class="ack">
+
+                    <input
+                        id="ack-${esc(app.id)}"
+                        type="text"
+                        value="${esc(
+                            app.acknowledgement
+                            || ""
+                        )}"
+                        placeholder="Enter acknowledgement number"
+                    >
+
+
+                    <button
+                        onclick="updateAck('${esc(app.id)}')"
+                    >
+                        ${
+                            app.acknowledgement
+                            ? "UPDATE ACK"
+                            : "GENERATE ACK"
+                        }
+                    </button>
+
+                </div>
+
+
+                <div
+                    class="meta"
+                    style="margin-top:12px"
+                >
+
+                    Status:
+
+                    <span class="badge">
+
+                        ${esc(
+                            app.status
+                            || "SUBMITTED"
+                        )}
+
+                    </span>
+
+                </div>
+
+            </div>
+
+        `
+        )
+        .join("");
+
+}
+
+
+/* =====================================================
+   ACK UPDATE
+===================================================== */
+
+function updateAck(id){
+
+    const input =
+        document.getElementById(
+            "ack-" + id
+        );
+
+
+    if(!input){
+        return;
+    }
+
+
+    const ack =
+        input.value.trim();
+
+
+    if(!ack){
+
+        alert(
+            "Please enter acknowledgement number."
+        );
+
+        return;
+    }
+
+
+    const apps =
+        getApps();
+
+
+    const application =
+        apps.find(
+            a => String(a.id)
+                === String(id)
+        );
+
+
+    if(!application){
+
+        alert(
+            "Application not found."
+        );
+
+        return;
+    }
+
+
+    application.acknowledgement =
+        ack;
+
+
+    application.status =
+        "ACKNOWLEDGEMENT_UPDATED";
+
+
+    application.updatedAt =
+        new Date()
+        .toLocaleString(
+            "en-IN"
+        );
+
+
+    saveApps(
+        apps
+    );
+
+
+    renderApps();
+
+
+    alert(
+        "Acknowledgement updated successfully."
+    );
+
+}
+
+
+/* =====================================================
+   MESSAGE
+===================================================== */
+
+function showMessage(
+    text,
+    type
+){
+
+    const box =
+        document.getElementById(
+            "rmsg"
+        );
+
+
+    box.textContent =
+        text;
+
+
+    box.className =
+        "message " +
+        (type || "");
+
+
+    box.style.display =
+        "block";
+
+
+    setTimeout(
+        () => {
+            box.style.display =
+                "none";
+        },
+        3000
+    );
+
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+function logout(){
+
+    location.href =
+        "index.html";
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function esc(value){
+
+    return String(
+        value ?? ""
+    ).replace(
+        /[&<>"']/g,
+        function(char){
+
+            return {
+
+                "&":"&amp;",
+                "<":"&lt;",
+                ">":"&gt;",
+                '"':"&quot;",
+                "'":"&#039;"
+
+            }[char];
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   START
+===================================================== */
+
+renderRetailers();
+renderApps();
+
+</script>
+
+</body>
+</html>
