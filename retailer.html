@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>PRAVINS PAN PORTAL - Retailer</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;color:#fff;font-family:Arial,Helvetica,sans-serif;background:radial-gradient(circle at 10% 0%,#172554 0,transparent 35%),radial-gradient(circle at 100% 100%,#312e81 0,transparent 35%),#070b16}
+.header{padding:24px 20px;border-bottom:1px solid rgba(255,255,255,.08);background:rgba(7,11,22,.8);backdrop-filter:blur(15px)}
+.header-inner{max-width:1050px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:15px}
+.logo-title{display:flex;align-items:center;gap:12px}.logo{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#facc15,#eab308);color:#111827;font-size:22px;font-weight:900}.title{font-size:20px;font-weight:900}.title span{color:#facc15}
+.user-area{display:flex;align-items:center;gap:10px}.user-name{font-weight:700;font-size:14px}.user-label{font-size:11px;color:#7f8ba3;margin-top:3px}.logout{border:1px solid #334155;background:#111827;color:#cbd5e1;padding:9px 13px;border-radius:10px;cursor:pointer;font-weight:700}.login-btn{width:100%;padding:13px 14px;border:0;border-radius:12px;background:linear-gradient(135deg,#facc15,#eab308);color:#111827;font-weight:900;cursor:pointer}.login-btn:disabled,.apply-btn:disabled{opacity:.6;cursor:not-allowed}
+.main{max-width:1200px;margin:auto;padding:35px 20px 60px}.welcome{margin-bottom:28px}.welcome h1{font-size:34px;margin-bottom:8px}.welcome p{color:#8f9bb1}
+.service-card{max-width:700px;background:rgba(15,23,42,.9);border:1px solid rgba(255,255,255,.09);border-radius:24px;padding:25px;box-shadow:0 25px 65px rgba(0,0,0,.35)}
+.service-icon{width:58px;height:58px;border-radius:16px;background:rgba(250,204,21,.12);display:flex;align-items:center;justify-content:center;font-size:30px;margin-bottom:18px}.service-card h2{font-size:22px;margin-bottom:8px}.service-card p{color:#929db2;font-size:14px;line-height:1.6;margin-bottom:22px}
+.apply-btn{width:100%;padding:15px;border:0;border-radius:13px;background:linear-gradient(135deg,#facc15,#eab308);color:#111827;font-size:15px;font-weight:900;cursor:pointer}.empty{color:#657188;font-size:13px;margin-top:20px}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);align-items:center;justify-content:center;padding:20px;z-index:10}.modal-box{width:100%;max-width:520px;background:#0f172a;border:1px solid #293750;border-radius:22px;padding:25px}.modal-box h2{margin-bottom:8px}.modal-box p{color:#94a3b8;font-size:14px;line-height:1.6}.close{float:right;background:none;border:0;color:#94a3b8;font-size:25px;cursor:pointer}.continue{width:100%;margin-top:20px;padding:14px;border:0;border-radius:12px;background:#facc15;color:#111827;font-weight:900;cursor:pointer}
+.form-card{max-width:700px}.form-card label{display:block;color:#cbd5e1;font-size:14px;margin:0 0 8px}.form-card input[type="text"],.form-card input[type="file"]{width:100%;padding:14px;border-radius:13px;border:1px solid #293750;background:#0b1220;color:#fff;font-size:14px;margin-bottom:16px}.form-card input[type="file"]{padding:11px}.file-note{font-size:12px;color:#8f9bb1;margin:-6px 0 8px}.form-message{display:none;margin-top:14px;padding:12px;border-radius:10px;font-size:13px;text-align:center}.form-message.ok{display:block;background:rgba(34,197,94,.1);color:#86efac}.form-message.err{display:block;background:rgba(239,68,68,.1);color:#fca5a5}.status-card{max-width:700px;margin-top:18px}.status-card h2{font-size:19px;margin-bottom:14px}.wallet-card{max-width:700px;margin-top:18px}
+.wallet-balance{font-size:32px;font-weight:900;color:#facc15;margin:8px 0 4px}.wallet-sub{color:#8f9bb1;font-size:12px}
+.wallet-list{margin-top:14px}.wallet-tx{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-top:1px solid #293750;font-size:12px}
+.wallet-credit{color:#59e3a2;font-weight:800}.wallet-debit{color:#fca5a5;font-weight:800}
+.application-status{padding:13px;border:1px solid #293750;background:#0b1122;border-radius:12px;margin-top:10px}.application-status b{display:block;font-size:14px}.application-status small{display:block;color:#8f9bb1;margin-top:5px}.ack{margin-top:9px;color:#59e3a2;font-weight:800;font-size:13px}.pending-ack{margin-top:9px;color:#facc15;font-size:13px;font-weight:700}
+@media(max-width:600px){.title{font-size:17px}.user-label{display:none}.user-name{font-size:12px}.welcome h1{font-size:28px}}
+</style>
+</head>
+<body>
+<header class="header"><div class="header-inner"><div class="logo-title"><div class="logo">P</div><div class="title">PRAVINS <span>PAN PORTAL</span></div></div><div class="user-area"><div><div class="user-name" id="retailerName">Retailer</div><div class="user-label">RETAILER ACCOUNT</div></div><button class="logout" onclick="logout()">Logout</button></div></div></header>
+<main class="main">
+  <section class="welcome">
+    <h1>PAN CARD APPLY</h1>
+    <p>Enter applicant name and upload the application document.</p>
+  </section>
+
+  <section class="service-card form-card">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px">
+      <div><div style="font-size:12px;color:#8f9bb1;margin-bottom:4px">SERVICE</div><div style="font-size:20px;font-weight:900">PAN CARD APPLY</div></div>
+      <div style="background:rgba(250,204,21,.12);border:1px solid rgba(250,204,21,.25);color:#facc15;padding:10px 12px;border-radius:12px;font-weight:900">₹160</div>
+    </div>
+    <div style="font-size:13px;color:#929db2;margin:-5px 0 18px">Service charge: ₹160 • ₹160 will be deducted from wallet on successful submission.</div>
+    <label for="applicantName">Name</label>
+    <input id="applicantName" type="text" placeholder="Enter applicant name" autocomplete="name">
+
+    <label for="applicationFile">Upload File</label>
+    <input id="applicationFile" type="file" accept=".pdf,.jpg,.jpeg,.png,.webp">
+    <div class="file-note">Maximum file size: 3 MB</div>
+
+    <button class="apply-btn" id="submitBtn" onclick="submitApplication()">SUBMIT</button>
+    <div id="formMessage" class="form-message"></div>
+  </section>
+
+  <section class="service-card wallet-card">
+    <h2>💰 Wallet</h2>
+    <div class="wallet-balance" id="walletBalance">₹0.00</div>
+    <div class="wallet-sub">Current wallet balance</div>
+    <button type="button" class="login-btn" style="margin-top:14px" onclick="openWalletTopup()">➕ ADD MONEY</button>
+
+    <div id="walletTopup" style="display:none;margin-top:14px;padding:16px;border:1px solid #293750;border-radius:14px;background:#0b1220">
+      <div style="font-size:13px;font-weight:800;margin-bottom:12px">Bank / Payment Details</div>
+      <div style="display:grid;gap:10px;margin-bottom:14px">
+        <div style="padding:12px;border:1px solid #293750;border-radius:12px;background:#080e1b">
+          <small style="display:block;color:#8f9bb1;margin-bottom:4px">ACCOUNT NUMBER</small>
+          <b style="font-size:15px;letter-spacing:.4px">0662073000000406</b>
+        </div>
+        <div style="padding:12px;border:1px solid #293750;border-radius:12px;background:#080e1b">
+          <small style="display:block;color:#8f9bb1;margin-bottom:4px">IFSC CODE</small>
+          <b style="font-size:15px;letter-spacing:.4px">SIBL0000662</b>
+        </div>
+      </div>
+
+      <label style="display:block;color:#cbd5e1;font-size:13px;margin-bottom:7px">Amount</label>
+      <input id="topupAmount" type="number" min="1" step="1" placeholder="Enter amount" style="width:100%;padding:12px 14px;margin-bottom:10px">
+
+      <label style="display:block;color:#cbd5e1;font-size:13px;margin-bottom:7px">Payment Reference / UTR Number</label>
+      <input id="paymentRef" type="text" placeholder="Enter reference / UTR number" style="width:100%;padding:12px 14px">
+
+      <button type="button" class="login-btn" style="margin-top:12px" onclick="submitWalletRequest()">SUBMIT PAYMENT REQUEST</button>
+      <div id="topupMessage" style="display:none;margin-top:10px;font-size:12px;text-align:center"></div>
+    </div>
+  </section>
+
+  <section class="service-card status-card">
+    <h2>My Applications</h2>
+    <div id="myApplications" class="empty">No applications submitted yet.</div>
+  </section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL="https://kaaygfiqlekvsihotqco.supabase.co";
+const SUPABASE_ANON_KEY="sb_publishable_JrUUCvoDDZx4LZ8AbSmZ1Q_RH4F0hLx";
+const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+
+let currentRetailer=null;
+let sessionChecking=false;
+
+function token(){ return sessionStorage.getItem("retailer_token")||""; }
+
+function clearRetailerSession(){
+  ["retailer_token","retailer_name","retailer_username","retailer_mobile","retailer_logged_in","retailer_wallet_balance"]
+    .forEach(k=>sessionStorage.removeItem(k));
+}
+
+function goToLogin(){
+  clearRetailerSession();
+  location.replace("index.html");
+}
+
+function normalizeRetailer(row){
+  if(Array.isArray(row)) return row[0]||null;
+  return row||null;
+}
+
+async function checkLogin(){
+  if(sessionChecking) return !!currentRetailer;
+  sessionChecking=true;
+  const t=token();
+  if(!t || sessionStorage.getItem("retailer_logged_in")!=="true"){
+    goToLogin(); return false;
+  }
+
+  try{
+    const {data,error}=await supabaseClient.rpc("retailer_get_me",{p_token:t});
+    if(error) throw error;
+    const row=normalizeRetailer(data);
+    if(!row) throw new Error("Retailer session expired. Please login again.");
+
+    currentRetailer=row;
+    const name=row.name||row.username||"Retailer";
+    document.getElementById("retailerName").textContent=name;
+    sessionStorage.setItem("retailer_name",name);
+    if(row.username) sessionStorage.setItem("retailer_username",row.username);
+
+    const wallet=Number(row.walletBalance ?? row.wallet_balance ?? 0);
+    currentRetailer.walletBalance=wallet;
+    currentRetailer.wallet_balance=wallet;
+    sessionStorage.setItem("retailer_wallet_balance",String(wallet));
+    return true;
+  }catch(e){
+    console.error("Retailer session verification failed:",e);
+    showFormMessage("Session expired. Please login again.",false);
+    setTimeout(goToLogin,900);
+    return false;
+  }finally{
+    sessionChecking=false;
+  }
+}
+
+function logout(){ goToLogin(); }
+
+function showFormMessage(text,ok){
+  const m=document.getElementById("formMessage");
+  m.className="form-message "+(ok?"ok":"err");
+  m.textContent=text;
+  m.style.display="block";
+}
+
+function openWalletTopup(){
+  const box=document.getElementById("walletTopup");
+  box.style.display=box.style.display==="none"?"block":"none";
+}
+
+function showTopupMessage(text,ok=false){
+  const m=document.getElementById("topupMessage");
+  m.textContent=text;
+  m.style.display="block";
+  m.style.color=ok?"#86efac":"#fca5a5";
+}
+
+async function submitWalletRequest(){
+  const amount=Number(document.getElementById("topupAmount").value);
+  const ref=document.getElementById("paymentRef").value.trim();
+
+  if(!currentRetailer){ showTopupMessage("Please login again."); return; }
+  if(!amount || amount<=0){ showTopupMessage("Enter a valid amount."); return; }
+  if(!ref){ showTopupMessage("Enter the payment reference / UTR number."); return; }
+
+  try{
+    const {error}=await supabaseClient.rpc("retailer_submit_wallet_request",{
+      p_token:token(),p_amount:amount,p_ref:ref
+    });
+    if(error) throw error;
+    document.getElementById("topupAmount").value="";
+    document.getElementById("paymentRef").value="";
+    showTopupMessage("Payment request sent to Admin. Wallet will update after approval.",true);
+  }catch(e){
+    console.error(e);
+    if(String(e.message||"").toLowerCase().includes("session")){
+      showTopupMessage("Session expired. Please login again.");
+      setTimeout(goToLogin,900);
+    }else{
+      showTopupMessage(e.message||"Unable to submit request.");
+    }
+  }
+}
+
+async function renderWallet(){
+  if(!currentRetailer) return;
+  try{
+    const {data,error}=await supabaseClient.rpc("retailer_wallet_balance",{p_token:token()});
+    if(error) throw error;
+
+    const balance=Number(data||0);
+    currentRetailer.walletBalance=balance;
+    currentRetailer.wallet_balance=balance;
+    document.getElementById("walletBalance").textContent="₹"+balance.toFixed(2);
+    sessionStorage.setItem("retailer_wallet_balance",String(balance));
+  }catch(e){
+    console.error("Wallet refresh failed:",e);
+    if(String(e.message||"").toLowerCase().includes("session")){
+      showFormMessage("Session expired. Please login again.",false);
+      setTimeout(goToLogin,900);
+    }
+  }
+}
+
+async function submitApplication(){
+  const name=document.getElementById("applicantName").value.trim();
+  const file=document.getElementById("applicationFile").files[0];
+  const btn=document.getElementById("submitBtn");
+  const serviceCharge=160;
+
+  document.getElementById("formMessage").style.display="none";
+
+  if(!name){ showFormMessage("Please enter applicant name.",false); return; }
+  if(!file){ showFormMessage("Please select a file.",false); return; }
+  if(file.size>3*1024*1024){ showFormMessage("File must be 3 MB or less.",false); return; }
+  if(!currentRetailer){ showFormMessage("Please login again.",false); return; }
+
+  // Always get the live wallet before allowing submission.
+  try{
+    const {data,error}=await supabaseClient.rpc("retailer_wallet_balance",{p_token:token()});
+    if(error) throw error;
+    const liveBalance=Number(data||0);
+    currentRetailer.walletBalance=liveBalance;
+    currentRetailer.wallet_balance=liveBalance;
+    document.getElementById("walletBalance").textContent="₹"+liveBalance.toFixed(2);
+    sessionStorage.setItem("retailer_wallet_balance",String(liveBalance));
+
+    if(liveBalance<serviceCharge){
+      showFormMessage("Insufficient wallet balance. ₹160 is required.",false);
+      return;
+    }
+  }catch(e){
+    console.error(e);
+    showFormMessage(String(e.message||"Unable to verify wallet. Please login again."),false);
+    if(String(e.message||"").toLowerCase().includes("session")) setTimeout(goToLogin,900);
+    return;
+  }
+
+  btn.disabled=true;
+  btn.textContent="SUBMITTING...";
+
+  try{
+    const dataUrl=await fileToDataURL(file);
+    const {data,error}=await supabaseClient.rpc("retailer_submit_application",{
+      p_token:token(),
+      p_name:name,
+      p_file_name:file.name,
+      p_file_type:file.type||"application/octet-stream",
+      p_file_size:file.size,
+      p_file_data:dataUrl
+    });
+    if(error) throw error;
+
+    document.getElementById("applicantName").value="";
+    document.getElementById("applicationFile").value="";
+    showFormMessage("Application submitted successfully. ₹160 deducted from wallet.",true);
+    await renderWallet();
+    await renderMyApplications();
+  }catch(e){
+    console.error("Application submission failed:",e);
+    const msg=String(e.message||"Unable to submit application.");
+    showFormMessage(msg,false);
+    if(msg.toLowerCase().includes("session")) setTimeout(goToLogin,900);
+  }finally{
+    btn.disabled=false;
+    btn.textContent="SUBMIT";
+  }
+}
+
+function fileToDataURL(file){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onload=()=>resolve(reader.result);
+    reader.onerror=()=>reject(reader.error);
+    reader.readAsDataURL(file);
+  });
+}
+
+async function renderMyApplications(){
+  const box=document.getElementById("myApplications");
+  if(!currentRetailer) return;
+
+  try{
+    const {data,error}=await supabaseClient.rpc("retailer_list_applications",{p_token:token()});
+    if(error){
+      // Do not spam the browser console when the database function is not deployed yet.
+      if(String(error.code||"")==="PGRST202"){
+        box.className="empty";
+        box.innerHTML="Applications will appear here after the Supabase application functions are enabled.";
+        return;
+      }
+      throw error;
+    }
+
+    const apps=Array.isArray(data)?data:[];
+    if(!apps.length){
+      box.className="empty";
+      box.innerHTML="No applications submitted yet.";
+      return;
+    }
+
+    box.className="";
+    box.innerHTML=apps.map(a=>`
+      <div class="application-status">
+        <b>${escapeHtml(a.name||"")}</b>
+        <small>${escapeHtml(a.fileName||"")} • ${a.createdAt?new Date(a.createdAt).toLocaleString("en-IN"):"-"}</small>
+        ${a.acknowledgement
+          ? `<div class="ack">✓ Acknowledgement: ${escapeHtml(a.acknowledgement)}</div>`
+          : `<div class="pending-ack">⏳ Acknowledgement pending</div>`}
+      </div>
+    `).join("");
+  }catch(e){
+    console.error("Application list failed:",e);
+    box.className="empty";
+    box.innerHTML="Unable to load applications right now.";
+  }
+}
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g,m=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"
+  }[m]));
+}
+
+(async()=>{
+  if(await checkLogin()){
+    await renderWallet();
+    await renderMyApplications();
+  }
+})();
+
+window.addEventListener("focus",async()=>{
+  if(currentRetailer){
+    await checkLogin();
+    if(currentRetailer){
+      await renderWallet();
+      await renderMyApplications();
+    }
+  }
+});
+</script>
+</body>
+</html>
