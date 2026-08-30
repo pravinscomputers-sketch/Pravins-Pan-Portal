@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRAVINS - Retailer Services</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#050914;
+  color:#f8fafc;
+}
+
+.header{
+  background:#0b1328;
+  border-bottom:1px solid #263451;
+  padding:18px 30px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  position:sticky;
+  top:0;
+  z-index:10;
+}
+
+.brand{
+  font-size:24px;
+  font-weight:900;
+  letter-spacing:.5px;
+}
+
+.brand span{
+  color:#facc15;
+}
+
+.retailer-info{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.retailer-name{
+  color:#dbe4f3;
+  font-weight:700;
+}
+
+.logout{
+  border:1px solid #33415f;
+  background:#111a30;
+  color:#fff;
+  padding:9px 14px;
+  border-radius:10px;
+  cursor:pointer;
+}
+
+.logout:hover{
+  background:#18233d;
+}
+
+.container{
+  max-width:1100px;
+  margin:35px auto;
+  padding:0 20px;
+}
+
+.hero{
+  background:linear-gradient(135deg,#101a35,#0b1328);
+  border:1px solid #293957;
+  border-radius:20px;
+  padding:28px;
+  margin-bottom:24px;
+}
+
+.hero h1{
+  margin:0 0 8px;
+  font-size:30px;
+}
+
+.hero p{
+  margin:0;
+  color:#9fb0d0;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:22px;
+}
+
+.card{
+  background:#10192e;
+  border:1px solid #2b3b5c;
+  border-radius:20px;
+  padding:25px;
+}
+
+.card h2{
+  margin:0 0 8px;
+  font-size:22px;
+}
+
+.desc{
+  color:#9fb0d0;
+  font-size:14px;
+  line-height:1.5;
+  margin-bottom:22px;
+}
+
+.service{
+  background:#081226;
+  border:1px solid #30415f;
+  border-radius:16px;
+  padding:22px;
+}
+
+.service-icon{
+  font-size:40px;
+  margin-bottom:10px;
+}
+
+.service h3{
+  font-size:22px;
+  margin:8px 0;
+}
+
+.service p{
+  color:#9fb0d0;
+  line-height:1.5;
+  font-size:14px;
+}
+
+.badge{
+  display:inline-block;
+  background:#172957;
+  color:#facc15;
+  padding:6px 10px;
+  border-radius:20px;
+  font-size:11px;
+  font-weight:800;
+  margin-bottom:15px;
+}
+
+label{
+  display:block;
+  margin:15px 0 7px;
+  color:#dbe4f3;
+  font-weight:600;
+  font-size:14px;
+}
+
+input[type="text"],
+input[type="tel"],
+input[type="file"]{
+  width:100%;
+  padding:13px 14px;
+  border-radius:11px;
+  border:1px solid #33415f;
+  background:#071124;
+  color:#fff;
+  outline:none;
+}
+
+input:focus{
+  border-color:#facc15;
+}
+
+input[type="file"]{
+  padding:10px;
+}
+
+.help{
+  color:#8fa2c6;
+  font-size:12px;
+  margin-top:7px;
+}
+
+.submit{
+  width:100%;
+  margin-top:20px;
+  padding:14px;
+  border:0;
+  border-radius:11px;
+  background:#facc15;
+  color:#090d18;
+  font-weight:900;
+  cursor:pointer;
+  font-size:14px;
+}
+
+.submit:hover{
+  background:#fbbf24;
+}
+
+.submit:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+}
+
+.message{
+  display:none;
+  margin-top:15px;
+  padding:12px;
+  border-radius:10px;
+  text-align:center;
+  font-size:13px;
+}
+
+.message.ok{
+  display:block;
+  background:#0b3525;
+  color:#86efac;
+  border:1px solid #166534;
+}
+
+.message.err{
+  display:block;
+  background:#351421;
+  color:#fda4af;
+  border:1px solid #6b2135;
+}
+
+.applications{
+  margin-top:22px;
+}
+
+.application{
+  background:#081226;
+  border:1px solid #2c3c5c;
+  border-radius:14px;
+  padding:17px;
+  margin-top:12px;
+}
+
+.app-top{
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+}
+
+.app-name{
+  font-weight:800;
+  font-size:16px;
+}
+
+.app-meta{
+  margin-top:6px;
+  color:#8fa2c6;
+  font-size:12px;
+  line-height:1.5;
+}
+
+.pending{
+  color:#facc15;
+  font-size:11px;
+  font-weight:800;
+}
+
+.completed{
+  color:#86efac;
+  font-size:11px;
+  font-weight:800;
+}
+
+.ack{
+  margin-top:12px;
+  padding:10px;
+  border-radius:9px;
+  background:#0b3525;
+  color:#86efac;
+  font-weight:800;
+  font-size:13px;
+}
+
+.no-app{
+  color:#8fa2c6;
+  padding:15px 0;
+}
+
+.loading{
+  color:#8fa2c6;
+  text-align:center;
+  padding:15px;
+}
+
+@media(max-width:800px){
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .header{
+    padding:15px;
+  }
+
+  .brand{
+    font-size:20px;
+  }
+
+  .retailer-name{
+    display:none;
+  }
+
+  .container{
+    margin-top:20px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+
+  <div class="brand">
+    PRAVINS <span>PAN</span> PORTAL
+  </div>
+
+  <div class="retailer-info">
+    <div class="retailer-name" id="retailerName">
+      Retailer
+    </div>
+
+    <button class="logout" onclick="logout()">
+      LOGOUT
+    </button>
+  </div>
+
+</header>
+
+<main class="container">
+
+  <section class="hero">
+    <h1>Retailer Services</h1>
+    <p>
+      Welcome to PRAVINS PAN Portal. Select a service and submit your customer's application.
+    </p>
+  </section>
+
+  <div class="grid">
+
+    <!-- SERVICE -->
+    <section class="card">
+
+      <h2>Available Services</h2>
+
+      <p class="desc">
+        Currently available service.
+      </p>
+
+      <div class="service">
+
+        <div class="service-icon">
+          📄
+        </div>
+
+        <span class="badge">
+          ACTIVE SERVICE
+        </span>
+
+        <h3>
+          PAN CARD APPLY
+        </h3>
+
+        <p>
+          Submit the customer's PAN application file for Admin review.
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- APPLICATION -->
+    <section class="card">
+
+      <h2>
+        Application Form
+      </h2>
+
+      <p class="desc">
+        Enter customer details and upload the PAN application file.
+      </p>
+
+      <label>
+        Customer Name
+      </label>
+
+      <input
+        id="customerName"
+        type="text"
+        placeholder="Enter customer name"
+        autocomplete="off"
+      >
+
+      <label>
+        Customer Mobile
+      </label>
+
+      <input
+        id="customerMobile"
+        type="tel"
+        placeholder="Enter mobile number"
+        maxlength="10"
+        autocomplete="off"
+      >
+
+      <label>
+        Application File
+      </label>
+
+      <input
+        id="applicationFile"
+        type="file"
+        accept=".pdf,.jpg,.jpeg,.png"
+      >
+
+      <div class="help">
+        PDF, JPG, JPEG or PNG • Maximum 3 MB
+      </div>
+
+      <button
+        id="submitBtn"
+        class="submit"
+        onclick="submitApplication()"
+      >
+        SUBMIT APPLICATION
+      </button>
+
+      <div id="formMessage" class="message"></div>
+
+    </section>
+
+  </div>
+
+
+  <!-- MY APPLICATIONS -->
+  <section class="card applications">
+
+    <h2>
+      My PAN Applications
+    </h2>
+
+    <p class="desc">
+      Applications submitted by you. Admin acknowledgement will appear here after update.
+    </p>
+
+    <div id="myApplications">
+      <div class="loading">
+        Loading applications...
+      </div>
+    </div>
+
+  </section>
+
+</main>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL =
+"https://kaaygfiqlekvsihotqco.supabase.co";
+
+const SUPABASE_ANON_KEY =
+"sb_publishable_JrUUCvoDDZxL4Z8AbSmZ1Q_RH4F0hLx";
+
+const supabaseClient =
+window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+);
+
+
+/* --------------------------------
+   RETAILER SESSION
+-------------------------------- */
+
+function getToken(){
+  return sessionStorage.getItem("retailer_token") || "";
+}
+
+function getRetailerName(){
+  return (
+    sessionStorage.getItem("retailer_name") ||
+    sessionStorage.getItem("retailer_username") ||
+    "Retailer"
+  );
+}
+
+function logout(){
+
+  sessionStorage.removeItem("retailer_token");
+  sessionStorage.removeItem("retailer_id");
+  sessionStorage.removeItem("retailer_name");
+  sessionStorage.removeItem("retailer_username");
+  sessionStorage.removeItem("retailer_mobile");
+  sessionStorage.removeItem("retailer_logged_in");
+
+  location.replace("index.html");
+}
+
+
+/* --------------------------------
+   ESCAPE HTML
+-------------------------------- */
+
+function escapeHtml(value){
+
+  return String(value ?? "").replace(
+    /[&<>"']/g,
+    function(m){
+
+      return {
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#039;"
+      }[m];
+
+    }
+  );
+}
+
+
+/* --------------------------------
+   MESSAGE
+-------------------------------- */
+
+function showMessage(text, ok=false){
+
+  const box =
+    document.getElementById("formMessage");
+
+  box.textContent = text;
+
+  box.className =
+    "message " + (ok ? "ok" : "err");
+
+  box.style.display = "block";
+}
+
+
+/* --------------------------------
+   FILE -> DATA URL
+-------------------------------- */
+
+function fileToDataURL(file){
+
+  return new Promise(function(resolve,reject){
+
+    const reader = new FileReader();
+
+    reader.onload = function(){
+      resolve(reader.result);
+    };
+
+    reader.onerror = function(){
+      reject(reader.error);
+    };
+
+    reader.readAsDataURL(file);
+
+  });
+
+}
+
+
+/* --------------------------------
+   SUBMIT APPLICATION
+-------------------------------- */
+
+async function submitApplication(){
+
+  const name =
+    document.getElementById("customerName")
+      .value.trim();
+
+  const mobile =
+    document.getElementById("customerMobile")
+      .value.trim();
+
+  const file =
+    document.getElementById("applicationFile")
+      .files[0];
+
+  const btn =
+    document.getElementById("submitBtn");
+
+
+  document.getElementById("formMessage")
+    .style.display = "none";
+
+
+  /* VALIDATION */
+
+  if(!getToken()){
+
+    showMessage(
+      "Retailer session not found. Please login again."
+    );
+
+    return;
+  }
+
+
+  if(!name){
+
+    showMessage(
+      "Please enter customer name."
+    );
+
+    return;
+  }
+
+
+  if(!mobile){
+
+    showMessage(
+      "Please enter customer mobile number."
+    );
+
+    return;
+  }
+
+
+  if(!/^[0-9]{10}$/.test(mobile)){
+
+    showMessage(
+      "Please enter a valid 10 digit mobile number."
+    );
+
+    return;
+  }
+
+
+  if(!file){
+
+    showMessage(
+      "Please select application file."
+    );
+
+    return;
+  }
+
+
+  if(file.size > 3 * 1024 * 1024){
+
+    showMessage(
+      "File must be 3 MB or less."
+    );
+
+    return;
+  }
+
+
+  const allowedTypes = [
+    "application/pdf",
+    "image/jpeg",
+    "image/png"
+  ];
+
+  if(
+    file.type &&
+    !allowedTypes.includes(file.type)
+  ){
+
+    showMessage(
+      "Only PDF, JPG, JPEG or PNG files are allowed."
+    );
+
+    return;
+  }
+
+
+  btn.disabled = true;
+  btn.textContent = "SUBMITTING...";
+
+
+  try{
+
+    const dataUrl =
+      await fileToDataURL(file);
+
+
+    const { data, error } =
+      await supabaseClient.rpc(
+        "retailer_submit_application_no_wallet",
+        {
+          p_token: getToken(),
+
+          p_name: name,
+
+          p_mobile: mobile,
+
+          p_file_name: file.name,
+
+          p_file_type:
+            file.type ||
+            "application/octet-stream",
+
+          p_file_size: file.size,
+
+          p_file_data: dataUrl
+        }
+      );
+
+
+    if(error){
+      throw error;
+    }
+
+
+    document.getElementById("customerName")
+      .value = "";
+
+    document.getElementById("customerMobile")
+      .value = "";
+
+    document.getElementById("applicationFile")
+      .value = "";
+
+
+    showMessage(
+      "Application submitted successfully. Admin will review it.",
+      true
+    );
+
+
+    await loadApplications();
+
+  }
+  catch(error){
+
+    console.error(
+      "Application submission error:",
+      error
+    );
+
+    showMessage(
+      error.message ||
+      "Unable to submit application."
+    );
+
+  }
+  finally{
+
+    btn.disabled = false;
+
+    btn.textContent =
+      "SUBMIT APPLICATION";
+
+  }
+
+}
+
+
+/* --------------------------------
+   LOAD MY APPLICATIONS
+-------------------------------- */
+
+async function loadApplications(){
+
+  const box =
+    document.getElementById(
+      "myApplications"
+    );
+
+
+  const token = getToken();
+
+
+  if(!token){
+
+    box.innerHTML =
+      '<div class="no-app">Please login again.</div>';
+
+    return;
+  }
+
+
+  try{
+
+    /*
+      Existing application list RPC.
+      No wallet involved.
+    */
+
+    const { data, error } =
+      await supabaseClient.rpc(
+        "retailer_list_applications",
+        {
+          p_token: token
+        }
+      );
+
+
+    if(error){
+
+      console.error(error);
+
+      box.innerHTML =
+        '<div class="no-app">Applications could not be loaded right now.</div>';
+
+      return;
+    }
+
+
+    const apps =
+      Array.isArray(data)
+        ? data
+        : [];
+
+
+    if(!apps.length){
+
+      box.innerHTML =
+        '<div class="no-app">No applications submitted yet.</div>';
+
+      return;
+    }
+
+
+    box.innerHTML =
+      apps.map(function(app){
+
+        const ack =
+          app.acknowledgement ||
+          app.ack_number ||
+          app.acknowledgement_number ||
+          "";
+
+
+        const customerName =
+          app.name ||
+          app.customer_name ||
+          "";
+
+
+        const fileName =
+          app.fileName ||
+          app.file_name ||
+          "";
+
+
+        const created =
+          app.createdAt ||
+          app.created_at ||
+          null;
+
+
+        return `
+
+          <div class="application">
+
+            <div class="app-top">
+
+              <div>
+
+                <div class="app-name">
+                  ${escapeHtml(customerName)}
+                </div>
+
+                <div class="app-meta">
+                  ${escapeHtml(fileName)}
+                  ${
+                    created
+                    ? " • " +
+                      new Date(created)
+                        .toLocaleString("en-IN")
+                    : ""
+                  }
+                </div>
+
+              </div>
+
+              <div class="${
+                ack
+                ? "completed"
+                : "pending"
+              }">
+
+                ${
+                  ack
+                  ? "ACKNOWLEDGEMENT RECEIVED"
+                  : "PENDING"
+                }
+
+              </div>
+
+            </div>
+
+
+            ${
+              ack
+              ? `
+                <div class="ack">
+                  ✓ Acknowledgement:
+                  ${escapeHtml(ack)}
+                </div>
+              `
+              : `
+                <div class="app-meta" style="margin-top:12px">
+                  ⏳ Waiting for Admin acknowledgement
+                </div>
+              `
+            }
+
+          </div>
+
+        `;
+
+      }).join("");
+
+  }
+  catch(error){
+
+    console.error(error);
+
+    box.innerHTML =
+      '<div class="no-app">Unable to load applications.</div>';
+
+  }
+
+}
+
+
+/* --------------------------------
+   INITIAL LOAD
+-------------------------------- */
+
+(function(){
+
+  const token =
+    getToken();
+
+  const loggedIn =
+    sessionStorage.getItem(
+      "retailer_logged_in"
+    );
+
+
+  if(!token || loggedIn !== "true"){
+
+    location.replace("index.html");
+
+    return;
+  }
+
+
+  document.getElementById(
+    "retailerName"
+  ).textContent =
+    getRetailerName();
+
+
+  loadApplications();
+
+})();
+
+
+/* Refresh applications when returning to tab */
+
+window.addEventListener(
+  "focus",
+  function(){
+
+    if(getToken()){
+      loadApplications();
+    }
+
+  }
+);
+
+</script>
+
+</body>
+</html>
